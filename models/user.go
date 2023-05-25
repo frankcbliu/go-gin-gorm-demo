@@ -16,9 +16,12 @@ type User struct {
 }
 
 func (user *User) CreateUser(username string, password string) bool {
+	if user.FindUser(username) {
+		return false
+	}
 	result := SqliteDB.Create(&User{Username: username, Password: getMD5String(password)})
 	if result.Error != nil {
-		log.Println("SqliteDB.Create error", result.Error)
+		log.Println("[User.CreateUser]", result.Error)
 		return false
 	}
 	return true
@@ -26,11 +29,11 @@ func (user *User) CreateUser(username string, password string) bool {
 
 func (user *User) CheckPassword(password string) bool {
 	if len(password) <= 0 {
-		log.Println("password empty")
+		log.Println("[User.CheckPassword]", "password empty")
 		return false
 	}
 	if user.Password != getMD5String(password) {
-		log.Println("password md5 check error")
+		log.Println("[User.CheckPassword]", "password md5 check error")
 		return false
 	}
 	return true
@@ -41,7 +44,7 @@ func (user *User) FindUser(username string) bool {
 	if user.ID > 0 {
 		return true
 	}
-	log.Println("Not found user:", username)
+	log.Println("[User.FindUser]", "Not found user:", username)
 	return false
 }
 

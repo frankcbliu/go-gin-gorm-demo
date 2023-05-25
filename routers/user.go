@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-gin-gorm-demo/models"
 	"go-gin-gorm-demo/utils"
-	"log"
 )
 
 // UserRegister 注册接口
@@ -12,11 +11,6 @@ func UserRegister(c *gin.Context) {
 	userName := c.PostForm("username")
 	password := c.PostForm("password")
 	user := models.User{}
-	if user.FindUser(userName) {
-		log.Println(userName, "exist, register error")
-		utils.FailMessage(c, "register error")
-		return
-	}
 	if !user.CreateUser(userName, password) {
 		utils.FailMessage(c, "register error")
 		return
