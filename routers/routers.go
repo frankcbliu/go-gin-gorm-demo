@@ -12,8 +12,8 @@ func InitRouter() *gin.Engine {
 
 	user := r.Group("/user")
 	{
-		user.GET("/register", UserRegister) // 注册
-		user.GET("/login", UserLogin)       // 登录
+		user.POST("/register", UserRegister) // 注册
+		user.POST("/login", UserLogin)       // 登录
 	}
 	//user.Use(utils.CookieCheck())
 	// 注册路由

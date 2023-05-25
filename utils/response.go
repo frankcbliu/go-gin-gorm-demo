@@ -5,6 +5,23 @@ import (
 	"net/http"
 )
 
+func ResponseMessage(ctx *gin.Context, httpStatus int, code int, msg string) {
+	ctx.JSON(httpStatus, gin.H{
+		"code": code,
+		"msg":  msg,
+	})
+}
+
+// SuccessMessage 成功
+func SuccessMessage(ctx *gin.Context, msg string) {
+	ResponseMessage(ctx, http.StatusOK, 0, msg)
+}
+
+// FailMessage 返回错误
+func FailMessage(ctx *gin.Context, msg string) {
+	ResponseMessage(ctx, http.StatusOK, 1, msg)
+}
+
 func Response(ctx *gin.Context, httpStatus int, code int, data gin.H, msg string) {
 	ctx.JSON(httpStatus, gin.H{
 		"code": code,
