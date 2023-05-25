@@ -17,5 +17,8 @@ func InitSqlite() {
 	}
 	SqliteDB = *db
 	// 初始化数据库表
-	SqliteDB.AutoMigrate(&User{})
+	err = SqliteDB.AutoMigrate(&User{})
+	if err != nil {
+		log.Fatal("failed to migrate User")
+	}
 }

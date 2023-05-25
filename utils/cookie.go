@@ -17,7 +17,6 @@ const (
 
 func SetCookie(c *gin.Context, userName string) {
 	token := generateToken(userName)
-
 	c.SetCookie(TOKEN, token, 0, "/", "localhost", false, true)
 }
 
@@ -30,7 +29,6 @@ func CookieCheck() gin.HandlerFunc {
 				return
 			}
 		}
-
 		// Cookie verification failed
 		c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden with no cookie"})
 		c.Abort()
@@ -45,7 +43,6 @@ type myCustomClaims struct {
 // 生成 token
 func generateToken(userName string) string {
 	mySigningKey := []byte(conf.Setting.Cookie.SecretKey)
-
 	// Create the Claims
 	claims := myCustomClaims{
 		userName,
@@ -53,7 +50,7 @@ func generateToken(userName string) string {
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(TokenTime * time.Minute)),
 		},
 	}
-
+	// 计算 token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	ss, err := token.SignedString(mySigningKey)
 	if err != nil {
@@ -67,7 +64,6 @@ func CheckToken(c *gin.Context, tokenString string) bool {
 	token, err := jwt.ParseWithClaims(tokenString, &myCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(conf.Setting.Cookie.SecretKey), nil
 	})
-
 	if claims, ok := token.Claims.(*myCustomClaims); ok && token.Valid {
 		log.Println(claims.UserName, " expire_time: ", claims.RegisteredClaims.ExpiresAt)
 		// 如果有效期少于5min，自动延长
@@ -77,7 +73,6 @@ func CheckToken(c *gin.Context, tokenString string) bool {
 	} else {
 		log.Println(err)
 	}
-
 	// token 有效
 	return token.Valid
 }

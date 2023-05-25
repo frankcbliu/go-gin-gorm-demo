@@ -5,4 +5,4 @@ sqlite:
   file_name: test.db # sqlite 数据库文件名
 
 cookie:
-  secret_key: test_demo
+  secret_key: test_token_secret # 自定义加密salt
