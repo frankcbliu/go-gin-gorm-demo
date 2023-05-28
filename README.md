@@ -1,5 +1,8 @@
 # go-gin-gorm-demo
 
+## v0.3 - 2023年05月28日
+- [x] 修复 json 请求的处理逻辑
+- 登录后获取用户ID的方式: `c.GetInt("UserId")`
 ## v0.2 - 2023年05月25日
 - [x] 完成用户登录
 - [x] 完成用户注册
@@ -13,4 +16,5 @@
 - [x] 支持通过cookie设置token & token刷新
 
 启动方式:
-- `terminal` 执行：`air` 即可
+- `terminal` 执行：`air` 即可(需先安装 air)
+- 直接启动: `go run main.go`

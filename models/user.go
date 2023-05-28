@@ -3,10 +3,12 @@ package models
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"gorm.io/gorm"
 	"log"
+
+	"gorm.io/gorm"
 )
 
+// User 用户
 type User struct {
 	gorm.Model
 

@@ -1,17 +1,27 @@
 package routers
 
 import (
-	"github.com/gin-gonic/gin"
 	"go-gin-gorm-demo/models"
 	"go-gin-gorm-demo/utils"
+	"log"
+
+	"github.com/gin-gonic/gin"
 )
+
+type UserReq struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
 
 // UserRegister 注册接口
 func UserRegister(c *gin.Context) {
-	userName := c.PostForm("username")
-	password := c.PostForm("password")
+	req := UserReq{}
+	if err := c.BindJSON(&req); err != nil {
+		utils.FailMessage(c, "parse param error")
+		return
+	}
 	user := models.User{}
-	if !user.CreateUser(userName, password) {
+	if !user.CreateUser(req.Username, req.Password) {
 		utils.FailMessage(c, "register error")
 		return
 	}
@@ -20,14 +30,17 @@ func UserRegister(c *gin.Context) {
 
 // UserLogin 登录接口
 func UserLogin(c *gin.Context) {
-	userName := c.PostForm("username")
-	password := c.PostForm("password")
-
+	req := UserReq{}
+	if err := c.BindJSON(&req); err != nil {
+		utils.FailMessage(c, "parse param error")
+		return
+	}
+	log.Println("username:", req.Username)
 	user := models.User{}
-	if !user.FindUser(userName) || !user.CheckPassword(password) {
+	if !user.FindUser(req.Username) || !user.CheckPassword(req.Password) {
 		utils.FailMessage(c, "login fail")
 		return
 	}
-	utils.SetCookie(c, userName)
+	utils.SetAuthorization(c, req.Username, user.ID)
 	utils.SuccessMessage(c, "login success")
 }
